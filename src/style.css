@@ -1,0 +1,55 @@
+/* 先引入Normalize，再自定义重置 */
+/* @import url('https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css');  */
+
+
+/* Eric Meyer’s CSS Reset 简化版 */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* 清除列表默认样式 */
+ol, ul {
+  list-style: none;
+}
+/* 清除引用元素默认样式 */  
+blockquote, q {
+  quotes: none;
+}
+/*自定义额外重置*/
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+/* 清除默认样式 + 让body占满视口高度 */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 让html和body占满视口 */
+html {
+  height: 100%;
+}
+body {
+  height: 100%; /* 或 height: 100%; 按需选择 */
+}
+#app{
+  height: 100%
+}
+.el-container{
+  height: 100%;
+  width: 100%;
+}
