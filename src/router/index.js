@@ -1,11 +1,12 @@
 import {createRouter, createWebHashHistory,} from 'vue-router'
 import Layout from '../views/Main.vue'
-import Login from '../views/login/Login.vue'
+import Login from '../views/login/index.vue'
 import Admin from '../views/auth/admin/index.vue'
 import Group from '../views/auth/group/index.vue'
 import Order from '../views/vppz/order/index.vue'
 import Staff from '../views/vppz/staff/index.vue'
 import Dashboard from '../views/dashboard/index.vue'
+import { isArray } from 'element-plus/es/utils/types.mjs'
 // import { Children } from 'react'
 // import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs'
 
@@ -67,5 +68,5 @@ const router = createRouter({
     //路由匹配模式
     history : createWebHashHistory()
 })
-
+// console.log(isArray(routes))//routes是数组类型
 export default router

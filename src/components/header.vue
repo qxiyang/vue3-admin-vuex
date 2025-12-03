@@ -12,7 +12,7 @@
             <router-link class="text flex-box" :to="{path:item.path}">
               {{ item.name }}
             </router-link>
-            <el-icon class="close" size="12"><Close /></el-icon>
+            <el-icon class="close" size="12" @click="closeTap(item,index)"><Close /></el-icon>
           </li>
         </ul>
     </div>
@@ -25,11 +25,7 @@
         </el-button>
         <template #dropdown><!--更推荐使用这种写法,而不是官方文档的写法-->
         <el-dropdown-menu>
-          <el-dropdown-item>黄金糕</el-dropdown-item>
-          <el-dropdown-item>狮子头</el-dropdown-item>
-          <el-dropdown-item>螺蛳粉</el-dropdown-item>
-          <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-          <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+          <el-dropdown-item @click="login()">退出</el-dropdown-item>
         </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -41,9 +37,50 @@
 import { useStore } from 'vuex';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';//获取当前路由的实例
+import { useRouter } from 'vue-router';//获取所有路由的实例
 const store = useStore()//拿到store实例----11.30
 const selectMenu = computed(()=>store.state.menu.selectMenu)//通过实例拿到数据
 const route = useRoute()
+const router = useRouter()
+const closeTap = (item,index) => {
+  store.commit('closeMenu',item)//关闭页面tap
+  //如果是不是当前页面的tap
+  if(route.path!==item.path) {return} //直接返回
+  const selectMenuData = selectMenu.value//记录数据，防止删除时冲突
+  
+  console.log(selectMenuData.length)//控制台查询bug
+
+  if(index===selectMenuData.length){  //如果当前页面是末尾tap
+
+    console.log("selectMenuData.length等于index")//控制台查询bug
+    if(!selectMenuData.length){   //如果当前是唯一tap
+
+      console.log("回到主菜单")//控制台查询bug
+      router.push('/')//回到主菜单
+
+
+    }else{//如果不是,tap变成前面的菜单，路由也更新为前面的路由
+
+      console.log("变成前面的菜单")//控制台查询bug
+      console.log({path:selectMenuData[index-1].path})//控制台查询bug
+
+      router.push({//参数为对象，所以用{}
+      path:selectMenuData[index-1].path
+      })
+    }
+  }else{//如果是中间的，tap为后面的菜单，路由为后面的路由
+
+      console.log({path:selectMenuData[index].path})//控制台查询bug
+      
+      router.push({//参数为对象，所以用{}
+      path:selectMenuData[index].path
+  })
+} 
+}
+// console.log(typeof(closeTap))//function
+const login = () => {
+  router.push('/login')
+}
 </script>
 
 <style lang = 'less' scoped>
