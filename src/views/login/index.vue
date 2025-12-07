@@ -19,7 +19,7 @@
           <el-input v-model="loginForm.userName" placeholder="请输入手机号" :prefix-icon="UserFilled"><!--使用v-model进行数据的双向绑定--></el-input>
         </el-form-item>
         <el-form-item prop="passWord">
-          <el-input v-model="loginForm.passWord" type="passWord" placeholder="请输入密码" :prefix-icon="Lock"><!--密码不可见，设置type为passWord--></el-input>
+          <el-input v-model="loginForm.passWord" type="password" placeholder="请输入密码" :prefix-icon="Lock"><!--密码不可见，设置type为passWord--></el-input>
         </el-form-item>
         <el-form-item v-if="formType" prop="validCode">
           <el-input v-model="loginForm.validCode" placeholder="请输入验证码" :prefix-icon="UserFilled">
@@ -41,9 +41,10 @@
 <script setup>
 import { UserFilled, Lock } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
-import { ref,reactive } from 'vue';
-import { getCode,userAuthentication,login } from '../../api';
+import { ref,reactive,computed,toRaw } from 'vue';
+import { getCode,userAuthentication,login,menuPermission } from '../../api';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 const imgUrl = new URL('../../public/login-head.png', import.meta.url).href
 //0登录，1注册
@@ -88,17 +89,20 @@ const validatePass = (rule,value,callback)=>{
 // }
 const loginFormRef = ref()
 const router = useRouter()
+//创建store实例
+const store = useStore()
+//拿到routerList
+const routerList = computed(() => store.state.menu.routerList)
 const submitForm = async(formEl) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      console.log(loginFormRef,'submit!')
+      // console.log(loginFormRef,'submit!')
       if(formType.value){
         userAuthentication(loginForm).then(({data})=>{
           if(data.code === 10000){// code是后端约定的「业务状态码」
             ElMessage.success("注册成功,请登录")
-            formType.value = 1
-            router.push('/')
+            formType.value = 0
           }
         })
       }else{
@@ -108,7 +112,15 @@ const submitForm = async(formEl) => {
             //将用户信息和token保存到浏览器缓存里
             localStorage.setItem('pz_token',data.data.token)
             localStorage.setItem('pz_userInfo',JSON.stringify(data.data.userInfo))
-            router.push('/')
+            menuPermission().then(({data}) => {
+              store.commit('dynamicMenu',data.data)//通过commit方法触发dynamicMenu函数拿到实例
+              console.log('routerList',routerList)
+              //toRaw将响应式数据routerList转变为普通数据
+              toRaw(routerList.value).forEach(item => {//遍历数据
+                router.addRoute('main',item)//将ite添加到main里面
+              })
+              router.push('/')
+            })
           }
         })
       }

@@ -36,6 +36,7 @@ http.interceptors.response.use(function (response) {
       ElMessage.warning(response.data.message)
       localStorage.removeItem('pz_useInfo')//清除用户信息
       localStorage.removeItem('pz_token')//清除token
+      
       window.location.href = window.location.origin//回到原页面
   }
     return response;

@@ -17,16 +17,15 @@
         </ul>
     </div>
     <div class="header-right">
-      <el-dropdown>
+      <el-dropdown @command="handleClick"><!--在这里使用click不生效，所以采用@command-->
         <el-button class="el-dropdown-link flex-box">
-            <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">
+            <el-avatar 
+              src="userInfo.avatar">
             </el-avatar>
-            <p class="username"> admin </p>
+            <p class="username">{{ userInfo.name }}</p>
         </el-button>
         <template #dropdown><!--更推荐使用这种写法,而不是官方文档的写法-->
-        <el-dropdown-menu>
-          <el-dropdown-item @click="login()">退出</el-dropdown-item>
-        </el-dropdown-menu>
+          <el-dropdown-item command="cancel">退出</el-dropdown-item>
         </template>
       </el-dropdown>
     </div>
@@ -42,6 +41,7 @@ const store = useStore()//拿到store实例----11.30
 const selectMenu = computed(()=>store.state.menu.selectMenu)//通过实例拿到数据
 const route = useRoute()
 const router = useRouter()
+const userInfo = JSON.parse(localStorage.getItem('pz_userInfo'))
 const closeTap = (item,index) => {
   store.commit('closeMenu',item)//关闭页面tap
   //如果是不是当前页面的tap
@@ -78,8 +78,14 @@ const closeTap = (item,index) => {
 } 
 }
 // console.log(typeof(closeTap))//function
-const login = () => {
-  router.push('/login')
+//退出
+const handleClick = (command) => {
+  if( command === 'cancel' ){//如果点击的是退出按钮
+    localStorage.removeItem('pz_token')
+    localStorage.removeItem('pz_userinfo')
+    
+    window.localStorage.href = window.localStorage.origin
+  }
 }
 </script>
 

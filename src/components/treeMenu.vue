@@ -23,8 +23,8 @@
             </template><!--有子菜单的需要渲染的内容可以复用，在vue会自动递归,不用写出来-->
             <tree-menu 
             :index = "`${props.index}-${item.meta.id}`" 
-            :menuData = "item.children " /><!--</tree-menu>能用单标签的就能用双标签-->
-          </el-sub-menu>
+            :menuData = "item.children " /><!--递归渲染当前文件在for开头是在menuData里面遍历，现在把遍历对象改为item.clidren从而实现递归-->
+          </el-sub-menu><!--</tree-menu>能用单标签的就能用双标签-->
         </template>
 </template>
 <script setup>
@@ -35,6 +35,7 @@ const store = useStore()
 const handleClick = (item,active)=>{
   router.push(item.meta.path)
   store.commit('addMenu',item.meta)//获取到点击的信息
+  store.commit('updataMenuActive',active)
 }
 //漏写setup导致defineProps函数报错显示未定义 
 const props = defineProps(['menuData','index'])//接收aside.vue传递过来的数据
