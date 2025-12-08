@@ -113,7 +113,7 @@ const dialogFormVisible = ref(false)
 const open = (rowData = {}) => {
       dialogFormVisible.value = true
       //操作为异步
-      nextTick((rowData) => {
+      nextTick(() => {
             if(rowData){
                   //使用浅克隆
                   Object.assign(form,{id:rowData.id,name:rowData.name})

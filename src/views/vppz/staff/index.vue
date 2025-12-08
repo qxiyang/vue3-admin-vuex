@@ -2,11 +2,23 @@
       <PanelHead />
       <div class="btns"><!--在同一行挨着排所以用flex-->
             <el-button :icon="Plus" type="primary" @click="open(null)" size="small">新增</el-button>
+      <el-popconfirm
+            width="220"
+            :icon="InfoFilled"
+            confirm-button-text="确定"
+            cancel-button-text="取消"
+            icon-color="#626AEF"
+            title="确定要删除吗?"
+            @confirm="popConfirm"
+      >
+            <template #reference><!--显示的内容-->
+                  <el-button :icon="Delete" type="danger" size="small">删除</el-button>
+            </template>
+      </el-popconfirm>
       </div>
       <div class="pagination-info">
-      <el-table :data="tableData.list">
-            <el-table-column type="selection" width="55"
-            @selection-change="handleSelectionChange"/>
+      <el-table :data="tableData.list" style="width: 100%" @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55"/>
             <el-table-column prop="id" label="id"/>
             <el-table-column prop="name" label="昵称"/>
             <el-table-column label="头像">
@@ -135,8 +147,8 @@
 </template>
 <script setup>
 import { ref,reactive,onMounted, nextTick } from 'vue'
-import { Check, Plus, Clock } from '@element-plus/icons-vue'
-import { photoList,companion,companionList } from '../../../api'//分别用于获取头像列表，添加陪护师，获取陪护师列表
+import { Check, Plus, Clock, Delete } from '@element-plus/icons-vue'
+import { photoList,companion,companionList,deleteCompanion } from '../../../api'//分别用于获取头像列表，添加陪护师，获取陪护师列表
 import { ElMessage } from 'element-plus'
 import  dayjs  from 'dayjs';
 
@@ -162,19 +174,49 @@ const tableData = reactive({
       list:[],
       total:0
 })
+//接收被选中的数据
+const selectedData = ref([])
 //选中函数
-const handleSelectionChange = () => {
-      
-}
+const handleSelectionChange = (val) => {
+      //获取被选中的数据、
+      console.log(val)///查看选中的数据
+      selectedData.value = val.map(item => ({id:item.id}))//将选中的数据的id组成一个新数组赋值给selectedData
+} 
 //打开弹窗
-const open = () => {
+const open = ( rowData = {}) => {
       dialogFormVisible.value = true
+      //异步渲染
+      nextTick(() => {
+            //如果是编辑，也就是有数据
+            if(rowData){
+                  //使用浅克隆
+                  Object.assign(form,rowData)//将rowData的数据赋值给form
+            }
+      })
+}
+//弹窗确认函数
+const popConfirm = () => {
+      if(!selectedData.value.length){
+            ElMessage.warning("请选择要删除的数据")
+            return
+      }
+      deleteCompanion({id:selectedData.value}).then(({data}) => {
+            if(data.code === 10000){
+                  ElMessage.success("删除成功")
+                  getListData()
+            }else{
+                  ElMessage.error(data.message)
+            }
+      })
 }
 //封装request函数
 const getListData = () => {
       companionList(paginationData).then(({data}) => {
             const {list,total} = data.data
-            tableData.list = list
+            list.forEach(item => {
+                  item.create_time = dayjs(item.create_time).format('YYYY-MM-DD') //将时间戳转换为日期格式 Year-Month-Day
+            });
+            tableData.list = list//真正的数据添加
             tableData.total = total
       })
 }
