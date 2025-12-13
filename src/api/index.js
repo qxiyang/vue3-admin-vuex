@@ -65,3 +65,7 @@ export const adminOrder = (params) => {
 export const updateOrder = (data) => {
     return request.post('/update/order',data)
 }
+//首页
+// export const report = () => {
+//     return request.get('/report')
+// }

@@ -1,5 +1,50 @@
-# Vue 3 + Vite
-
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+项目介绍
+本项目是一款医疗陪诊服务类移动端前端应用，基于 Vue3 + Vite 技术栈开发，集成了用户登录鉴权、个人中心管理、订单状态分类查询、服务对象管理等核心功能，为用户提供便捷的医疗陪诊服务预约与订单跟踪能力，适配移动端多终端显示，提升用户就医陪诊的体验效率。
+技术栈
+核心框架与工具
+前端框架：Vue3（<script setup> 语法糖）
+构建工具：Vite（快速热更新、高效打包）
+路由管理：Vue Router 4（实现页面路由跳转与登录鉴权）
+UI 组件库：Vant 4（移动端专用 UI 组件，如弹窗、按钮、图片、图标等）、Element Plus（部分场景辅助组件）
+样式预处理：Less（CSS 预编译，实现样式模块化与复用）
+核心功能
+1. 登录鉴权
+基于 localStorage 存储 h5_token 与 h5_userInfo，实现登录态持久化；
+通过 Vue Router 导航守卫实现路由拦截：未登录用户自动跳转至登录页，避免未授权访问；
+支持退出登录功能，清除本地登录态并跳转至登录页，防止返回缓存页面。
+2. 个人中心
+用户信息展示：通过计算属性读取本地用户信息，渲染头像与用户名；
+订单分类入口：支持「待支付 / 待服务 / 已完成 / 已取消」4 种订单状态快速跳转，通过路由参数传递筛选条件；
+辅助功能：服务对象管理、分享转发入口；
+退出确认：通过 Vant 弹窗实现退出操作二次确认，防止误操作。
+3. 订单管理
+接收路由参数 active，实现对应状态订单的筛选展示；
+支持「全部订单」入口，查看用户所有订单数据。
+4. 时间格式化
+封装时间戳转换工具函数，实现时间戳到「年 - 月 - 日 时：分」格式的转换，解决日期补零与格式统一问题。
+快速启动
+环境要求
+Node.js ≥ 16.0.0
+npm/yarn/pnpm 包管理工具
+启动步骤
+克隆项目
+bash
+运行
+git clone [项目仓库地址]
+cd [项目文件夹名]
+安装依赖
+bash
+运行
+npm install
+# 或 yarn install
+# 或 pnpm install
+本地开发
+bash
+运行
+npm run dev
+启动后访问终端输出的本地地址（默认 http://127.0.0.1:5173），即可预览项目。
+打包构建
+bash
+运行
+npm run build
+打包产物输出至 dist 目录，可部署至静态服务器或后端服务中。

@@ -183,7 +183,7 @@ const confrim = async (formEl) => {
 <style lang = 'less' scoped>
 .flex-box{
       display: flex;
-      align-items: center;
+      justify-content: flex-start
 }
 .btns{
       padding: 10px 0 10px 10px;
