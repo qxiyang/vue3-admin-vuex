@@ -23,26 +23,16 @@ UI 组件库：Vant 4（移动端专用 UI 组件，如弹窗、按钮、图片�
 4. 时间格式化
 封装时间戳转换工具函数，实现时间戳到「年 - 月 - 日 时：分」格式的转换，解决日期补零与格式统一问题。
 # 快速启动
-环境要求
-Node.js ≥ 16.0.0
-npm包管理工具
-启动步骤
-克隆项目
-bash
-运行
+环境要求Node.js ≥ 16.0.0npm包管理工具启动步骤克隆项目bash运行
 ```plaintext
 git clone [项目仓库地址]
 cd [项目文件夹名]
 ```
-安装依赖
-bash
-运行
+安装依赖bash运行
 ```plaintext
 npm install
-``
-本地开发
-bash
-运行
+```
+本地开发bash运行
 ```plaintext
 npm run dev
 ```

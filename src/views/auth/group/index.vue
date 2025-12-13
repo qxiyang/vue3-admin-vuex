@@ -8,9 +8,9 @@
             <el-table-column prop="name" label="昵称"/>
             <el-table-column prop="permissionName" label="菜单权限"/>
             <el-table-column label="操作">
-                  <template #default="scoped">
-                        <el-button type="primary" @click="open(scoped.row)">编辑</el-button><!--点击打开修改菜单-->
-                  </template>
+                        <template #default="scoped">
+                              <el-button type="primary" @click="open(scoped.row)">编辑</el-button><!--点击打开修改菜单-->
+                        </template>
             </el-table-column>
       </el-table>
       <div class="pagination-info">
@@ -171,5 +171,8 @@ const confrim = async(formEl) => {//异步操作
       .btns{
             padding: 10px 0 10px 10px;
             background-color: #fff;
+      }
+      .active {
+            align-items: center;
       }
 </style>
